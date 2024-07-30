@@ -1,0 +1,63 @@
+GENERAL:
+  GPU_ID: 0
+  SEED: 1234
+  WORKER: 20
+  SAVE_PREFIX: './out_dir/errnet_224'
+  EXP_NAME: 'exp_light'
+  DEBUG_MODE: False
+DATA:
+  DATA_TYPE: ERRNET # Please specify the type of the dataset (select from IBCLN/ERRNET/CEILNET)
+  TRAIN_DATASET: /data/RRDatasets/train/ERRNET # The training data path, e.g., ./uhdm_data/Train
+  TEST_DATASET: /data/RRDatasets/test # The test data path, e.g., ./uhdm_data/Test
+
+DATA_PREPROCESS:  
+  max_data_size: 10000000000 # equals float("inf")
+  batch_size: 2
+  preprocess: resize_and_crop
+  no_flip: True
+  num_threads: 20
+  crop_size: 224
+  load_size: 224
+  serial_batches: True
+  input_nc: 3
+  output_nc: 3
+  blurKernel: 5
+  dataset_size: 4000
+
+MODEL:
+  EN_FEATURE_NUM: 24 # The initial channel number of dense blocks of encoder
+  EN_INTER_NUM: 16 # The growth rate (intermediate channel number) of dense blocks of encoder
+  DE_FEATURE_NUM: 32 # The initial channel number of dense blocks of decoder
+  DE_INTER_NUM: 16 # The growth rate (intermediate channel number) of dense blocks of decoder
+  DMM_NUMBER: 1 # The number of DMM
+
+TRAIN:
+  #BATCH_SIZE: 2
+  loader: resize_and_crop # The loading way for training data, e.g., crop, resize, default; see ./dataset/load_data.py
+  lr_policy: linear  # 'learning rate policy. [linear | step | plateau | cosine]'
+  niter_decay: 0
+  epoch_count: 1
+  niter: 150
+  #CROP_SIZE: 256 # Set the crop size if LOADER==crop
+  #LOAD_SIZE: 256 # Set the resizing size if LOADER==crop
+  SAVE_ITER: 1000 # Save training images/results at each SAVE_ITER*n iter
+  LOAD_EPOCH: 140 # If specify it, loading the corresponding model for resuming training
+  LAM: 1 # The loss weight for L1 loss
+  LAM_P: 0.8 # The loss weight for perceptual loss
+  
+
+TEST:
+  TEST_EPOCH: 150 # Input 'auto' for loading the latest model
+  SAVE_IMG: False # The file type (e.g., jpg, png) for saving the output image; set False to avoid saving
+  LOAD_PATH: False # If specify a load path for a checkpoint, TEST_EPOCH will be deprecated
+  EVALUATION_METRIC: True # If True, calculate metrics
+  EVALUATION_TIME: False # If True, calculate processing time per image; EVALUATION_METRIC will be deprecated for accurate statistics
+  EVALUATION_COST: False #If True, calculate MACs and Parameters number
+  SAVE_EPOCH: 2
+SOLVER:
+  EPOCHS: 150 # The total training epochs
+  T_0: 50 # The total epochs for the first learning cycle (learning rate warms up then)
+  T_MULT: 1 # The learning cycle would be (T_0, T_0*T_MULT, T_0*T_MULT^2, T_0*T_MULT^3, ...)
+  ETA_MIN: 0.000001 # Initial learning rate in each learning cycle
+  BASE_LR: 0.0002 # Learning rate in the end of each learning cycle
+
