@@ -4,6 +4,6 @@ is comming soon~
 # weights
 
 # train
-  python train.py
+    python train.py
 # val
-  python test.py
+    python test.py
