@@ -1,5 +1,5 @@
 # RR4K Dataset
-![RR4k Samples](./img/rr4k_samples.png)
+![RR4k Samples](.img/rr4k_samples.png)
 
 is comming soon~
 
